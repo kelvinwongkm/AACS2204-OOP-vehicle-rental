@@ -199,7 +199,7 @@ public class Reservation implements VehicleRelated {
 
             tempVehicle = Vehicle.getData(o);
 
-            if (tempVehicle.isEmpty()) {
+            if (tempVehicle == null) {
                 System.out.printf("%30s No vehicle founded.\n", "");
                 return;
             }
@@ -457,19 +457,13 @@ public class Reservation implements VehicleRelated {
             System.out.printf("%15s +------+--------------------+----------------------+---------------------------+-------------------------------------------+\n", "");
         }
 
-        System.out.printf("\n%30s 0. Return\n", "");
-
         int selection = 0;
 
         do {
             System.out.println("");
             selection = validateIntegerInput("Please select required vehicle to view more information : ");
-        } while (!validateOptionRange(0, matchedRecord.size(), selection));
-
-        if (selection == 0) {
-            return;
-        }
-
+        } while (!validateOptionRange(1, matchedRecord.size(), selection));
+	
         Reservation selectedReservation = matchedRecord.get(selection - 1);
         displayReservationInfo(selectedReservation);
 

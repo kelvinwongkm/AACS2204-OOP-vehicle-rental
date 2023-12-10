@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import static vehiclerental.GeneralValidation.validateConfirm;
 
 /**
  *
@@ -21,7 +22,10 @@ public class VehicleRental {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-       new VehicleRental();
+//	new VehicleRental();
+    Report r = new Report();
+    r.assignVehiclesReserved();
+    r.displayReport();
 
     }
 
@@ -71,17 +75,8 @@ public class VehicleRental {
     }
 
     public static int askConfirmation(String str) {
-	Scanner scanner = new Scanner(System.in);
-	String option;
-	int confirm;
-	do {
-	    System.out.printf("\n%30s %10s", "", "Are you sure you want to " + str + "(Y/N)? ");
-	    option = scanner.nextLine();
-	} while (validationConfirmation(option) == false);
-	if (option.charAt(0) == ('Y') || option.charAt(0) == ('y')) {
-	    return confirm = 1;
-	}
-	return confirm = 0;
+	boolean confirm = validateConfirm(String.format("%10s", "Are you sure you want to " + str + "(Y/N)? "));
+	return confirm ? 1 : 0;
     }
 
     public static boolean validationConfirmation(String option) {
@@ -173,18 +168,20 @@ public class VehicleRental {
 	    }
 	}
 
-	if (list.size() % 3 == 0) {
-	    System.out.printf("\n%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
-	}else if (list.size() % 3 > 0 && list.size() > 3) {
-	    System.out.printf("%-34s|", "");
-	    System.out.printf("%-34s|\n", "");
-	    System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
-
-	} else if (list.size() % 2 > 0) {
-	    System.out.printf("%-34s|", "");
-	    System.out.printf("%-34s|", "");
-	    System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
-
+	switch (list.size() % 3) {
+	    case 0:
+		System.out.printf("\n%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+		break;
+	    case 1:
+		System.out.printf("%-34s|", "");
+		System.out.printf("%-34s|\n", "");
+		System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+		break;
+	    default:
+		System.out.printf("%-34s|", "");
+		System.out.printf("%-34s|", "");
+		System.out.printf("\n%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+		break;
 	}
     }
 

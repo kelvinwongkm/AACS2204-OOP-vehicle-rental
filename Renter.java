@@ -282,7 +282,7 @@ public class Renter extends User implements AvailableLocation {
             String tempState = scanner.nextLine();
             state = validationOptionNum(tempState, 9);
         } while (validationState(state) == false);
-
+	
         do {
             System.out.printf("\n%27s %10s", "", "City : ");
             city = scanner.nextLine();

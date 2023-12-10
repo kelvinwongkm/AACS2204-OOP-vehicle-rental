@@ -170,7 +170,7 @@ public class GeneralValidation {
     }
 
     public static boolean noInput() {
-        System.out.printf("\n%30s Invalid is entered, please enter again\n\n", "");
+        System.out.printf("\n%30s Invalid input is entered, please enter again\n\n", "");
         return false;
     }
 

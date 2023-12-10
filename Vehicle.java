@@ -206,7 +206,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
             } else if (((i + 1) % 2) != 0) {
                 System.out.print(", ");
             } else {
-                System.out.printf(", \n%30s |%-20s : %-15s   ", "", "", "");
+                System.out.printf(", \n%15s %39s |%-16s   ", "","", "");
             }
         }
         System.out.println("");
@@ -220,7 +220,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
 
             if (rentInfo.getAvailableStartDate().size() != (i + 1)) {
                 System.out.print(", ");
-                System.out.printf("\n%30s %50s | %-23s   ", "", "", "");
+                System.out.printf("\n%30s %24s | %18s", "", "", "");
             }
         }
         System.out.println("");

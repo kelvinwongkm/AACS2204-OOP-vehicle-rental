@@ -44,9 +44,10 @@ public class Report implements VehicleRelated {
                 }
             }
             System.out.println("");
-            System.out.printf("        Date Generated: " + java.time.LocalDate.now());
+           
 
         }
+	 System.out.printf("     Date Generated: " + java.time.LocalDate.now());
     }
 
     public void displayChart() throws IOException {
