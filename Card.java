@@ -8,7 +8,7 @@ import static vehiclerental.GeneralValidation.validateStringInput;
 
 /**
  *
- * @author Melvin
+ * @author Melvin Wong Wai Hung
  */
 public class Card extends Payment {
 
@@ -39,7 +39,7 @@ public class Card extends Payment {
 	    System.out.printf("%30s 1. Visa\n","");
 	    System.out.printf("%30s 2. MasterCard\n","");
 	    cardSelection = validateIntegerInput(
-		    "Please enter your selection; ");
+		    "Please enter your selection: ");
 	} while (!assignCardType(cardSelection));
 
 	// get card number

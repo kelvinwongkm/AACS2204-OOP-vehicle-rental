@@ -7,7 +7,7 @@ import static vehiclerental.GeneralValidation.validateStringInput;
 
 /**
  *
- * @author Melvin
+ * @author Melvin Wong Wai Hung
  */
 public class EWallet extends Payment {
 

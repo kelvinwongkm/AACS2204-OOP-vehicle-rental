@@ -6,16 +6,30 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Melvin Wong Wai Hung
+ */
 
 public class Report implements VehicleRelated {
 
-    private static int totalVehiclesReserved[] = new int[3];   //1 is car, 2 is motorbike, 3 is RV (stands for total cars reserved for that category)
-    private static int vehiclesReserved[][] = new int[3][6];
-    private static double revenueEarned[] = new double[3];
+    private int totalVehiclesReserved[];
+    private int vehiclesReserved[][];
+    private double revenueEarned[];
+    private List<Payment> paymentRecord;
+
+    public Report() {
+        totalVehiclesReserved = new int[3];//1 is car, 2 is motorbike, 3 is RV (stands for total cars reserved for that category)
+        vehiclesReserved = new int[3][6];
+        revenueEarned = new double[3];
+        paymentRecord = new ArrayList();
+    }
 
     public void displayReport() throws IOException {
         Calendar cal = Calendar.getInstance();
-        System.out.printf("%30sVehicle Type Ranking Report in %s 2021\n", "", new SimpleDateFormat("MMMM").format(cal.getTime()));
+        System.out.printf("\n%30sVehicle Type Ranking Report in %s 2021\n", "", new SimpleDateFormat("MMMM").format(cal.getTime()));
         System.out.printf("%5s-------------------------------------------------------------------------------------------------\n", "");
         System.out.printf("%5s%-35s %-42s %-20s\n", "", "Vehicle Type", "No. of Vehicles Reserved", "Revenue Earned(RM)");
         System.out.printf("%5s-------------------------------------------------------------------------------------------------", "");
@@ -25,17 +39,18 @@ public class Report implements VehicleRelated {
             System.out.printf("%5s--------------------%36s --- %18s------------------\n", " ", " ", " ");
 
             for (int j = 0; j < 6; j++) { //the first condition is to not show the vehicle type if 0 reserved
-                if (vehiclesReserved[i][j] != 0 || !(i == 2 && j == 5)) {   //remove the comment to test out after done assigning vehiclesReserved values method
+                if (vehiclesReserved[i][j] != 0 || !(i == 2 && j == 5)) {
                     System.out.printf("%5s%-35s %24d\n", " ", DETAILEDTYPELIST[i][j], vehiclesReserved[i][j]);
-                    //}
                 }
             }
-        }
-        System.out.println(java.time.LocalDate.now());
+            System.out.println("");
+            System.out.printf("        Date Generated: " + java.time.LocalDate.now());
 
+        }
     }
 
     public void displayChart() throws IOException {
+        Scanner scanner = new Scanner(System.in);
         Calendar cal = Calendar.getInstance();
         System.out.printf("\n\n%20sSimple Bar Chart for Vehicle Type Ranking Report in %s 2021\n\n", "", new SimpleDateFormat("MMMM").format(cal.getTime()));
         System.out.printf("%-11s No. of Vehicles Reserved\n", "");
@@ -64,6 +79,9 @@ public class Report implements VehicleRelated {
 
         System.out.printf("%15s+--------------------------------------------------------------> Vehicle Type\n", "");
         System.out.printf("%14s        Car             Motorbike       Recreational Vehicle\n", "");
+
+        System.out.printf("\n\n%30s %10s", "", "Press any key to continue : ");
+        scanner.nextLine();
     }
 
     public void assignVehiclesReserved() throws IOException {
@@ -71,7 +89,7 @@ public class Report implements VehicleRelated {
         //add up the values in vehiclesReserved[0][j] to totalVehiclesReserved accordingly
 
         //read file method
-        List<Payment> paymentRecord = Payment.getData();
+        paymentRecord = Payment.getData();
         List<Reservation> reservationRecord = new ArrayList<>();
 
         for (Payment payment : paymentRecord) {

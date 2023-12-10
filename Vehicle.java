@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.awt.HeadlessException;
@@ -25,10 +20,12 @@ import static vehiclerental.GeneralValidation.validateIntegerInput;
 import static vehiclerental.GeneralValidation.validateOptionRange;
 import static vehiclerental.GeneralValidation.validateStringInput;
 import static vehiclerental.VehicleRental.printConstantList;
+import static vehiclerental.VehicleRental.successfullyMsg;
+import static vehiclerental.VehicleRental.unsuccessfullyMsg;
 
 /**
  *
- * @author kelvin
+ * @author Wong Kah Ming
  */
 public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
 
@@ -123,7 +120,8 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
     public void addVehicleAndInfo(String vehicleType) {
         int selectedOption;
 
-        System.out.printf("\n%30s Vehicle Registration - %s\n", "", vehicleType);
+        System.out.printf("\n%37s Vehicle Registration - %s\n", "", vehicleType);
+        System.out.printf("%30s %35s\n\n", "", "=========================================");
 
         //get platenum
         String enteredPlateNum = validateStringInput(
@@ -144,7 +142,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
         do {
             System.out.printf("%30s %s type : \n", "", vehicleType);
             printConstantList(typeList);
-            selectedOption = validateIntegerInput(String.format("Please select your %s type : ", vehicleType.toLowerCase()));
+            selectedOption = validateIntegerInput(String.format("\n%30s Please select your %s type : ", "",vehicleType.toLowerCase()));
         } while (!validateOptionRange(0, typeList.length, selectedOption));
         vehicleBasic.setType(typeList[selectedOption - 1]);
         System.out.println("");
@@ -165,7 +163,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
             System.out.println(String.format("%30s Fuel Type : ", ""));
             printConstantList(FUELTYPEOPTION);
 
-            selectedOption = validateIntegerInput(String.format("Please select your %s's fuel type : ", vehicleType.toLowerCase()));
+            selectedOption = validateIntegerInput(String.format("\n%30s Please select your %s's fuel type : ","", vehicleType.toLowerCase()));
 
         } while (!validateOptionRange(1, FUELTYPEOPTION.length, selectedOption));
         setFuelType(FUELTYPEOPTION[selectedOption - 1]);
@@ -175,7 +173,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
             System.out.println(String.format("%30s Transmission type : ", ""));
             printConstantList(transmissionList);
 
-            selectedOption = validateIntegerInput(String.format("Please select your %s's transmission type : ", vehicleType.toLowerCase()));
+            selectedOption = validateIntegerInput(String.format("\n%30s Please select your %s's transmission type : ","", vehicleType.toLowerCase()));
 
         } while (!validateOptionRange(1, transmissionList.length, selectedOption));
         setTransmission(transmissionList[selectedOption - 1]);
@@ -183,19 +181,21 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
         System.out.println("");
         rentInfo.addRentInfo();
 
-        System.out.printf("\n%30s Preview\n", "");
+        System.out.printf("\n%45s Preview\n", "");
+        System.out.printf("%30s %35s\n\n", "", "=========================================");
         viewVehicleInfoFullVersion();
 
     }
 
     public void viewVehicleInfoFullVersion() {
-        System.out.printf("%30s -------------------------------------------------------------------------------------\n", "");
-        System.out.printf("%30s  %12s %-25s | %12s %-28s \n", "", "", "Vehicle Info", "", "Rent Info");
-        System.out.printf("%30s  %-20s : %-15s | %-15s : %-23s \n", "",
+        System.out.printf("\n%15s  -------------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s  %12s %-25s | %12s %-28s \n", "", "", "Vehicle Info", "", "Rent Info");
+         System.out.printf("%15s  -------------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s  %-20s : %-15s | %-15s : %-23s \n", "",
                 "Vehicle ID", getVehicleID(), "Location", rentInfo.getLocation());
-        System.out.printf("%30s  %-20s : %-15s | %-15s : RM %-20.2f \n", "",
+        System.out.printf("%15s  %-20s : %-15s | %-15s : RM %-20.2f \n", "",
                 "Plate Number", vehicleBasic.getPlateNum(), "Rent Rate", rentInfo.getRentRate());
-        System.out.printf("%30s  %-20s : %-15s | %-15s : ", "",
+        System.out.printf("%15s  %-20s : %-15s | %-15s : ", "",
                 "Vehicle Type", vehicleBasic.getType(), "Feature", rentInfo.getAvailableFeature().toString().replace("[", "").replace("]", ""));
 
         for (int i = 0; i < rentInfo.getAvailableFeature().size(); i++) {
@@ -206,12 +206,12 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
             } else if (((i + 1) % 2) != 0) {
                 System.out.print(", ");
             } else {
-                System.out.printf(", \n%30s  %-20s : %-15s   ", "", "", "");
+                System.out.printf(", \n%30s |%-20s : %-15s   ", "", "", "");
             }
         }
         System.out.println("");
 
-        System.out.printf("%30s  %-20s : %-15s | %-15s : ", "",
+          System.out.printf("%15s  %-20s : %-15s | %-15s : ", "",
                 "Vehicle Make", vehicleBasic.getMake(), "Available Day");
 
         for (int i = 0; i < rentInfo.getAvailableStartDate().size(); i++) {
@@ -225,79 +225,79 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
         }
         System.out.println("");
 
-        System.out.printf("%30s  %-20s : %-15s | %41S \n", "", "Vehicle Model", vehicleBasic.getModel(), "");
-        System.out.printf("%30s  %-20s : %-15d | %41S \n", "", "Year Purchase", vehicleBasic.getYear(), "");
-        System.out.printf("%30s  %-20s : %-15.2f | %41S \n", "", "Engine Size", getEngineSize(), "");
-        System.out.printf("%30s  %-20s : %-15s | %41S \n", "", "Transmission", getTransmission(), "");
-        System.out.printf("%30s  %-20s : %-15s | %41S \n", "", "Fuel Type", vehicleBasic.getType(), "");
-        System.out.printf("%30s  %-20s : %-15d | %41S \n", "", "Seats", getSeats(), "");
-        System.out.printf("%30s -------------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s  %-20s : %-15s | %41S \n", "", "Vehicle Model", vehicleBasic.getModel(), "");
+        System.out.printf("%15s  %-20s : %-15d | %41S \n", "", "Year Purchase", vehicleBasic.getYear(), "");
+        System.out.printf("%15s  %-20s : %-15.2f | %41S \n", "", "Engine Size", engineSize, "");
+        System.out.printf("%15s  %-20s : %-15s | %41S \n", "", "Transmission", transmission, "");
+        System.out.printf("%15s  %-20s : %-15s | %41S \n", "", "Fuel Type", vehicleBasic.getType(), "");
+        System.out.printf("%15s  %-20s : %-15d | %41S \n", "", "Seats", seats, "");
+        System.out.printf("%15s  -------------------------------------------------------------------------------------\n", "");
     }
 
     public void viewVehicleInfoReservationVersion() {
 
-        System.out.printf("%30s %-23s : %-24s | %-23s : %-24s \n", "",
-                "Vehicle ID", getVehicleID(), "Vehicle Type", vehicleBasic.getType());
-        System.out.printf("%30s %-23s : %-24s | %-23s : %-24s \n", "",
-                "Vehicle Make", vehicleBasic.getMake(), "Vehicle Model", vehicleBasic.getModel());
-        System.out.printf("%30s %-23s : %-24d | %-23s : %-22.02f \n", "",
-                "Year Purchase", vehicleBasic.getYear(), "Engine Size", getEngineSize());
-        System.out.printf("%30s %-23s : %-24s | %-23s : %-24s \n", "",
-                "Transmission", getTransmission(), "Fuel Type", vehicleBasic.getType());
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s | Vehicle ID         : %-20s | Rent Rate    : RM %-32.2f |\n",
+                "", vehicleID, rentInfo.getRentRate());
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s | Vehicle Make       : %-20s | Feature      : ",
+                "", vehicleBasic.getMake());
 
-        System.out.printf("%30s %-23s : %-24d | %-23s : ", "",
-                "Seats", getSeats(), "Feature");
-
-        for (int i = 0; i < rentInfo.getAvailableFeature().size(); i++) {
-            System.out.print(rentInfo.getAvailableFeature().get(i).trim());
-
-            if (i + 1 == rentInfo.getAvailableFeature().size()) {
+        String temp = "";
+        for (int i = 0, counter = 1; i < rentInfo.getAvailableFeature().size(); i++, counter++) {
+            temp += rentInfo.getAvailableFeature().get(i).trim();
+            if (counter % 2 == 0) {
+                System.out.printf("%-35s |", temp);
+                temp = "";
+            } else if (i + 1 == rentInfo.getAvailableFeature().size()) {
                 break;
             } else if (((i + 1) % 2) != 0) {
-                System.out.print(", ");
+                temp += ", ";
             } else {
-                System.out.printf(", \n%30s %50s | %-23s   ", "", "", "");
+                System.out.printf("\n%15s | %41s | %-12s   ", "", "", "");
             }
         }
         System.out.println("");
 
-        System.out.printf("%30s %-23s : RM %-21.02f | %-23s : ", "",
-                "Rent Rate", rentInfo.getRentRate(), "Available Day");
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s | Vehicle Type       : %-20s | Engine Size  : %-35.2f |\n",
+                "", vehicleBasic.getType(), engineSize);
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s | Vehicle Model      : %-20s | Transmission : %-35s |\n",
+                "", vehicleBasic.getModel(), transmission);
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s | Year Purchase      : %-20d | Fuel Type    : %-35s |\n",
+                "", vehicleBasic.getYear(), fuelType.trim());
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
 
-        for (int i = 0; i < rentInfo.getAvailableStartDate().size(); i++) {
-            System.out.print(LocalDate.parse(rentInfo.getAvailableStartDate().get(i).trim()).format(DateTime.DATEFORMAT)
-                    + " - " + LocalDate.parse(rentInfo.getAvailableEndDate().get(i).trim()).format(DateTime.DATEFORMAT));
-
-            if (rentInfo.getAvailableStartDate().size() != (i + 1)) {
-                System.out.print(", ");
-                System.out.printf("\n%30s %50s | %-23s   ", "", "", "");
-            }
-        }
-        System.out.println("");
+        System.out.printf("%15s | Seats              : %-20d |                                                    |\n",
+                "", seats);
+        System.out.printf("%15s +-------------------------------------------+----------------------------------------------------+\n", "");
 
     }
 
-    public static int updateVehicleMenu() {
+    public  int updateVehicleMenu() {
         int number;
 
         do {
             System.out.printf("\n%37s %15s\n", " ", "Staff");
             System.out.printf("%30s %35s\n\n", "", "=========================================");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %10s %-12s %-10s |\n", "", "", "1. Vehicle details", "");
+            System.out.printf("%30s | %10s %-12s %-7s |\n", "", "", "1. Vehicle details", "");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %10s %-12s %-10s |\n", "", "", "2. Renting details", "");
+            System.out.printf("%30s | %10s %-12s %-7s |\n", "", "", "2. Renting details", "");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %10s %-12s %10s |\n", "", "", "0. Return", "");
+            System.out.printf("%30s | %10s %-12s %-13s |\n", "", "", "0. Return", "");
             System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
-            System.out.println("Please select the category that you want to update.");
-            number = validateIntegerInput("Please enter your selection : ");
+            System.out.printf("%30s %10s\n", "", "Please select the category that you want to update.");
+            number = validateIntegerInput(String.format("\n%30s %10s", "", "Your Selection |> "));
         } while (!validateOptionRange(0, 2, number));
 
         return number;
     }
 
     public void viewVehicle(Object o) throws IOException {
+        Staff staff = new Staff();
         boolean validInput = false;
         String input = new String();
         int counter;
@@ -310,6 +310,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
         }
 
         do {
+            System.out.println("");
             validInput = false;
             input = validateStringInput("Please enter the vehicle id you want to view : ");
 
@@ -334,6 +335,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 if (validateConfirm("Are you confirm to delete selected vehicle info? (Y/N) : ")) {
                     vehicleList.remove(counter);
                     Reservation.writeFile(getFileName(o), vehicleList);
+                    successfullyMsg("delete selected vehicle info");
+                    staff.updateActivityPerformed(2);
+                }else{
+                    unsuccessfullyMsg("delete selected vehicle info");
                 }
                 break;
         }
@@ -348,18 +353,18 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
             return null;
         }
 
-        System.out.printf("%30s     -----------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s     -----------------------------------------------------------------------------------\n", "");
         for (int i = 0; i < vehicleList.size(); i++) {
-            System.out.printf("%30s %02d. | %-15s : %-15s | %-20s : %-20s |\n", "",
+            System.out.printf("%15s %02d. | %-15s : %-15s | %-20s : %-20s |\n", "",
                     i + 1, "Vehicle ID", vehicleList.get(i).getVehicleID(),
                     "Model", vehicleList.get(i).getVehicleBasic().getModel());
-            System.out.printf("%30s     | %-15s : %-15s | %-20s : %-20s |\n", "",
+            System.out.printf("%15s     | %-15s : %-15s | %-20s : %-20s |\n", "",
                     "Make", vehicleList.get(i).getVehicleBasic().getMake(),
                     "Type", vehicleList.get(i).getVehicleBasic().getType());
-            System.out.printf("%30s     | %-15s : %-15s | %-20s : RM %-17.2f |\n", "",
+            System.out.printf("%15s     | %-15s : %-15s | %-20s : RM %-17.2f |\n", "",
                     "Year Purchase", vehicleList.get(i).getVehicleBasic().getYear(),
                     "Rent Rate (per day)", vehicleList.get(i).getRentInfo().getRentRate());
-            System.out.printf("%30s     -----------------------------------------------------------------------------------\n", "");
+            System.out.printf("%15s     -----------------------------------------------------------------------------------\n", "");
         }
 
         return vehicleList;
@@ -396,20 +401,19 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
 
         int selection;
         boolean updateConfirm = false;
-
-        System.out.printf("%30s ---------------------------Update Vehicle Details------------------------------\n", "");
-        System.out.printf("%30s | %-23s | %-23s | %-23s |\n", "1. Plate Number", "2. Type", "3. Make/Brand");
-        System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
-        System.out.printf("%30s | %-23s | %-23s | %-23s |\n", "4. Model", "5. Year", "6. Engine Size");
-        System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
-        System.out.printf("%30s | %-23s | %-23s | %-23s |\n", "7. Transmission", "8. Fuel Type", "9. Seats");
-        System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
-        System.out.printf("%30s | %-23s   %-23s   %-23s |\n", "0. Return", "", "");
-        System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
+        Staff staff = new Staff();
+        System.out.printf("\n\n%15s ---------------------------Update Vehicle Details------------------------------\n", "");
+        System.out.printf("%15s | %-23s | %-23s | %-23s |\n", "", "1. Plate Number", "2. Type", "3. Make/Brand");
+        System.out.printf("%15s -------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s | %-23s | %-23s | %-23s |\n", "", "4. Model", "5. Year", "6. Engine Size");
+        System.out.printf("%15s -------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s | %-23s | %-23s | %-23s |\n", "", "7. Transmission", "8. Fuel Type", "9. Seats");
+        System.out.printf("%15s -------------------------------------------------------------------------------\n", "");
+        System.out.printf("%15s | %-23s   %-23s   %-23s |\n", "", "0. Return", "", "");
+        System.out.printf("%15s -------------------------------------------------------------------------------\n\n", "");
 
         do {
-
-            selection = validateIntegerInput(String.format("%30s Please enter your selection : ", ""));
+            selection = validateIntegerInput(String.format("\n%30s %10s", "", "Your Selection |> "));
             System.out.println("");
         } while (!validateOptionRange(0, 9, selection));
 
@@ -427,6 +431,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.vehicleBasic.setPlateNum(plateNumber);
+                    successfullyMsg("updated plate number");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated plate number");
                 }
 
                 break;
@@ -444,6 +452,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.vehicleBasic.setType(selectedType);
+                    successfullyMsg("updated vehicle type");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated vehicle type");
                 }
 
                 break;
@@ -456,6 +468,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.vehicleBasic.setMake(newBrand);
+                    successfullyMsg("updated vehicle make/brand");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated vehicle make/brand");
                 }
                 break;
 
@@ -468,6 +484,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.vehicleBasic.setModel(newModel);
+                    successfullyMsg("updated vehicle model");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated vehicle model");
                 }
                 break;
 
@@ -479,6 +499,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.vehicleBasic.setYear(newYear);
+                    successfullyMsg("updated vehicle year of purchase");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated vehicle year of purchase");
                 }
 
                 break;
@@ -492,6 +516,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.setEngineSize(newEngineSize);
+                    successfullyMsg("updated engine size");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated engine size");
                 }
                 break;
 
@@ -509,6 +537,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.setTransmission(selectedTransmission);
+                    successfullyMsg("updated transmission");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated transmission");
                 }
                 break;
 
@@ -528,6 +560,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.setFuelType(selectedFuelType);
+                    successfullyMsg("updated fuel type");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated fuel type");
                 }
 
                 break;
@@ -541,6 +577,10 @@ public abstract class Vehicle implements Comparable<Vehicle>, VehicleRelated {
                 updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                 if (updateConfirm) {
                     data.setSeats(newSeats);
+                    successfullyMsg("updated seats");
+                    staff.updateActivityPerformed(3);
+                } else {
+                    unsuccessfullyMsg("updated seats");
                 }
 
                 break;

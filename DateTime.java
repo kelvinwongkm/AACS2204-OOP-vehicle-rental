@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
-import vehiclerental.Reservation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -16,8 +10,10 @@ import java.util.Scanner;
 
 /**
  *
- * @author kelvin
+ * @author Wong Kah Ming
  */
+
+
 public class DateTime {
 
     public static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ofPattern("dd/MM/uuuu");
@@ -62,7 +58,7 @@ public class DateTime {
             wantedDate = LocalDate.parse(string, DateTime.DATEFORMAT);
 
             if (dateDiffInDays(cmpDate, wantedDate) < minAvailableDay) {
-                System.out.printf("%30s Insufficient duration, please make sure is more than %d day from %s\n\n","", minAvailableDay, cmpDate.toString());
+                System.out.printf("\n%30s Insufficient duration, please make sure is more than %d day from %s\n\n","", minAvailableDay, cmpDate.toString());
             }
         } while (dateDiffInDays(cmpDate, wantedDate) < minAvailableDay);
 
@@ -100,7 +96,7 @@ public class DateTime {
 
         for (int y = 0; y < originalSize; y++) {
 
-            if ((reservation.getPickUp().getDate().plusDays(1)
+            if ((reservation.getPickUp().getDate().minusDays(1)
                     .equals(LocalDate.parse(storedEndDate.get(y).trim())))) {
                 storedEndDate.remove(y);
 
@@ -108,7 +104,7 @@ public class DateTime {
 
             if ((reservation.getDropOff().getDate().plusDays(1)
                     .equals(LocalDate.parse(storedStartDate.get(y).trim())))) {
-                storedEndDate.remove(y);
+                storedStartDate.remove(y);
 
             }
 

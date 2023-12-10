@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.io.IOException;
 import java.util.Arrays;
 import static vehiclerental.GeneralValidation.validateConfirm;
 import static vehiclerental.VehicleRental.getLatestID;
+import static vehiclerental.VehicleRental.successfullyMsg;
+import static vehiclerental.VehicleRental.unsuccessfullyMsg;
 
 /**
  *
- * @author kelvin
+ * @author Wong Kah Ming
  */
 public class RecreationalVehicle extends Vehicle {
 
@@ -34,7 +31,7 @@ public class RecreationalVehicle extends Vehicle {
 
     @Override
     public void addVehicle() throws IOException {
-
+        Staff staff = new Staff();
 	int id = getLatestID(getFileName(this),0) + 1;
 	setVehicleID(String.format("%s%02d", "RV", id));
 
@@ -43,8 +40,11 @@ public class RecreationalVehicle extends Vehicle {
 	if (validateConfirm("Do you confirm your input? (Y/N) : ")) {
 
 	    Vehicle.appendSingleRecord(getFileName(this), super.toString());
-
-	}
+            successfullyMsg("added a recreational vehicle");
+            staff.updateActivityPerformed(1);
+	}else{
+            unsuccessfullyMsg("added a recreational vehicle");
+        }
     }
 
 }

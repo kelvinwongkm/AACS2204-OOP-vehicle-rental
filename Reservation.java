@@ -22,36 +22,35 @@ import static vehiclerental.GeneralValidation.validateIntegerInput;
 import static vehiclerental.GeneralValidation.validateMultiInteger;
 import static vehiclerental.GeneralValidation.validateOptionRange;
 import static vehiclerental.VehicleRelated.VEHICLETYPE;
+import static vehiclerental.VehicleRental.askConfirmation;
 import static vehiclerental.VehicleRental.getLatestID;
 import static vehiclerental.VehicleRental.printConstantList;
+import static vehiclerental.VehicleRental.printType;
+import static vehiclerental.VehicleRental.successfullyMsg;
+import static vehiclerental.VehicleRental.unsuccessfullyMsg;
+
+/**
+ *
+ * @author Wong Kah Ming
+ */
 
 public class Reservation implements VehicleRelated {
 
-//    private String renterID;
     private Renter renter;
     private Vehicle vehicle;
     private String reservationID;
-    private DateTime pickUp = new DateTime();
-    private DateTime dropOff = new DateTime();
+    private DateTime pickUp;
+    private DateTime dropOff;
     private String location;
     private int rentalDuration;
 
     public Reservation(Renter renter) {
-//        this.renterID = renter.getRenterID();
         this.renter = renter;
-    }
-
-    public Reservation() {
-    }
-
-    public Renter getRenter() {
-        return renter;
+        pickUp = new DateTime();
+        dropOff = new DateTime();
     }
 
     public Reservation(String[] str) throws IOException {
-        for (String string : str) {
-            System.out.println(string);
-        }
         reservationID = str[0];
         pickUp = new DateTime(LocalDate.parse(str[1]), LocalTime.parse(str[2]));
         dropOff = new DateTime(LocalDate.parse(str[3]), LocalTime.parse(str[4]));
@@ -65,27 +64,19 @@ public class Reservation implements VehicleRelated {
         } else if (str[6].matches("RV.*")) {
             vehicle = Vehicle.getData(new RecreationalVehicle(), str[6]);
         }
-        
-        System.out.println("testing1");
-//        renterID = str[7];
-        renter = new Renter(str[7]);
-        System.out.println("testing2");
+
+        renter = Renter.getRenterData(str[7]);
         rentalDuration = DateTime.dateDiffInDays(pickUp.getDate(), dropOff.getDate());
-        System.out.println("testing3");
+    }
+
+    public Renter getRenter() {
+        return renter;
     }
 
     public Vehicle getVehicle() {
         return vehicle;
     }
-//
-//    public String getRenterID() {
-//        return renterID;
-//    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
+    
     public String getLocation() {
         return location;
     }
@@ -108,16 +99,16 @@ public class Reservation implements VehicleRelated {
 
     public String[] inputSearchInfo() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        int id = getLatestID("reservation.txt", 0) +1;
+        int id = getLatestID("reservation.txt", 0) + 1;
         reservationID = String.format("%s%02d", "RS", id);
         String time, vehicleType;
         int reserveType;
 
         do {
             System.out.printf("\n%30s Available Vehicle Type : \n", "");
-            printConstantList(VEHICLETYPE);
+            printType(VEHICLETYPE);
 
-            reserveType = validateIntegerInput("Please select the vehicle type you want to reserve : ");
+            reserveType = validateIntegerInput(String.format("\n%30s Please select the vehicle type you want to reserve : ", ""));
         } while (!validateOptionRange(1, VEHICLETYPE.length, reserveType));
         vehicleType = VEHICLETYPE[reserveType - 1];
 
@@ -244,6 +235,7 @@ public class Reservation implements VehicleRelated {
         }
 
         for (Vehicle vehicle : tempVehicle) {
+
             for (int y = 0; y < vehicle.getRentInfo().getAvailableStartDate().size(); y++) {
 
                 LocalDate availableStartDate = LocalDate.parse(vehicle.getRentInfo().getAvailableStartDate().get(y).trim());
@@ -336,10 +328,10 @@ public class Reservation implements VehicleRelated {
 
         List<Vehicle> temp = new ArrayList<>();
 
-        System.out.printf("%30s The following %s has/have been foundeded\n", "", message);
+        System.out.printf("\n%30s The following %s has/have been founded\n", "", message);
         printConstantList(returnSelectedList);
 
-        System.out.printf("%30s You may select more than 1 %s. Please separate your selection with comma. IE: 1,2\n", "", message);
+        System.out.printf("%15s You may select more than 1 %s. Please separate your selection with comma. IE: 1,2\n", "", message);
 
         List<String> selection = validateMultiInteger(returnSelectedList);
 
@@ -382,15 +374,17 @@ public class Reservation implements VehicleRelated {
         do {
             System.out.printf("\n%30s The following vehicle(s） meet your needs.\n", "");
 
-            System.out.printf("\n%30s     -------------------------------------------------------------------------\n", "");
+            System.out.printf("\n%15s +------+--------------+-------------------------------+-----------------------+------------------------+\n", "");
+            System.out.printf("%15s |  No. |  Make        |  Model                        |  Type                 |   Rent Rate / Day (RM) |\n", "");
+            System.out.printf("%15s +------+--------------+-------------------------------+-----------------------+------------------------+\n", "");
+
             for (int i = 0; i < vehicleList.size(); i++) {
-                System.out.printf("%30s %02d. | %-10s : %-15s | %-20s : %-15s |\n", "",
-                        i + 1, "Make", vehicleList.get(i).getVehicleBasic().getMake(),
-                        "Model", vehicleList.get(i).getVehicleBasic().getModel());
-                System.out.printf("%30s     | %-10s : %-15s | %-20s : RM %-12.2f |\n", "",
-                        "Type", vehicleList.get(i).getVehicleBasic().getType(),
-                        "Rent Rate (per day)", vehicleList.get(i).getRentInfo().getRentRate());
-                System.out.printf("%30s     -------------------------------------------------------------------------\n", "");
+                System.out.printf("%15s | %3d. |  %-11s |  %-28s |  %-19s  |  %-20.2f  |\n", "",
+                        i + 1, vehicleList.get(i).getVehicleBasic().getMake(),
+                        vehicleList.get(i).getVehicleBasic().getModel(),
+                        vehicleList.get(i).getVehicleBasic().getType(),
+                        vehicleList.get(i).getRentInfo().getRentRate());
+                System.out.printf("%15s +------+--------------+-------------------------------+-----------------------+------------------------+\n", "");
             }
 
             do {
@@ -433,7 +427,6 @@ public class Reservation implements VehicleRelated {
         }
 
         for (Reservation reservation : allReservationRecord) {
-            System.out.println(reservation.getRenter().getRenterID());
             if (reservation.getRenter().getRenterID().equalsIgnoreCase(renterID)) {
                 matchedRecord.add(reservation);
             }
@@ -444,11 +437,10 @@ public class Reservation implements VehicleRelated {
             return;
         }
 
-        for (Reservation reservation1 : matchedRecord) {
-            System.out.println(reservation1.getVehicle().getVehicleBasic());
-        }
+        System.out.printf("\n%15s +------+--------------------+----------------------+---------------------------+-------------------------------------------+\n", "");
+        System.out.printf("%15s |  No. |  Reservation ID    |  Location            |  Reserved Vehicle ID      |   Reservation Duration                    |\n", "");
+        System.out.printf("%15s +------+--------------------+----------------------+---------------------------+-------------------------------------------+\n", "");
 
-        System.out.printf("\n%30s     ---------------------------------------------------------------------------------------------------------\n","");
         for (int i = 0; i < matchedRecord.size(); i++) {
             String reservationDuration = DateTime.displayDateTime(
                     matchedRecord.get(i).getPickUp().getDate().format(DATEFORMAT),
@@ -457,14 +449,12 @@ public class Reservation implements VehicleRelated {
                     matchedRecord.get(i).getDropOff().getTime().toString()
             );
 
-            System.out.printf("%30s %02d. | %-20s : %-15s | %-20s : %-37s |\n","",
-                    i + 1, "Reservation ID", matchedRecord.get(i).getReservationID(),
-                    "Location", matchedRecord.get(i).getLocation());
-            System.out.printf("%30s     | %-20s : %-15s | %-20s : %-37s |\n","",
-                    "Reserved Vehicle ID", matchedRecord.get(i).getVehicle().getVehicleID(),
-                    "Reservation Duration", reservationDuration);
-            System.out.printf("%30s     ---------------------------------------------------------------------------------------------------------\n","");
-
+            System.out.printf("%15s | %3d. |  %-17s |  %-19s |  %-24s |  %-40s |\n", "",
+                    i + 1, matchedRecord.get(i).getReservationID(),
+                    matchedRecord.get(i).getLocation(),
+                    matchedRecord.get(i).getVehicle().getVehicleID(),
+                    reservationDuration);
+            System.out.printf("%15s +------+--------------------+----------------------+---------------------------+-------------------------------------------+\n", "");
         }
 
         System.out.printf("\n%30s 0. Return\n", "");
@@ -495,8 +485,16 @@ public class Reservation implements VehicleRelated {
             case 0:
                 return;
             case 1:
-                deleteReservation(allReservationRecord, selectedReservation);
-                break;
+                int confirm = askConfirmation("cancel reservation");
+                if (confirm == 1) {
+                    deleteReservation(allReservationRecord, selectedReservation);
+                    successfullyMsg("cancel reservation");
+                    break;
+                } else {
+                    unsuccessfullyMsg("cancel reservation");
+                    break;
+                }
+
         }
 
     }
@@ -539,19 +537,21 @@ public class Reservation implements VehicleRelated {
 
     public static void displayReservationInfo(Reservation reservation) {
 
-        System.out.printf("%30s %-23s : %-24s | %-23s : %-24s \n","",
-                "Reservation ID", reservation.getReservationID(),
-                "Location", reservation.getLocation());
-
-        System.out.printf("%30s %-23s : %-24s \n","",
-                "Date Duration", DateTime.displayDateTime(
+        System.out.println("");
+        System.out.printf("%15s +--------------------+----------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s |  Reservation ID    | Location             |   Duration                                         |\n", "");
+        System.out.printf("%15s +--------------------+----------------------+----------------------------------------------------+\n", "");
+        System.out.printf("%15s |  %-17s | %-19s  |   %-48s |\n",
+                "", reservation.getReservationID(), reservation.getLocation(),
+                DateTime.displayDateTime(
                         reservation.getPickUp().getDate().format(DateTime.DATEFORMAT),
                         reservation.getPickUp().getTime().toString(),
                         reservation.getDropOff().getDate().format(DateTime.DATEFORMAT),
-                        reservation.getDropOff().getTime().toString()
-                ));
+                        reservation.getDropOff().getTime().toString()));
+        System.out.printf("%15s +--------------------+----------------------+----------------------------------------------------+\n", "");
         System.out.println("");
         reservation.vehicle.viewVehicleInfoReservationVersion();
+        System.out.println("");
     }
 
     public static void writeFile(String fileName, List<?> objectList) throws IOException {

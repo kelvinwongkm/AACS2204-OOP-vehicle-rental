@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.awt.AWTException;
@@ -17,34 +12,27 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author GhostGod
+ *
  */
 public class VehicleRental {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-//        new VehicleRental();
-//        Reservation r = new Reservation();
-//        String renterID = "R00002";
-//        r.onGoingReservation(renterID);
-
-        Report r = new Report();
-        r.assignVehiclesReserved();
-        r.displayReport();
-        r.displayChart();
-        
+       new VehicleRental();
 
     }
 
     public VehicleRental() {
+
 	int option = 0, confirm;
 	Renter renter = new Renter();
 	Staff staff = new Staff();
 	Scanner scanner = new Scanner(System.in);
 	do {
-	    System.out.printf("\n%42s %15s\n", " ", "Vehicle Rental");
+	    System.out.printf("\n%40s %15s\n", " ", "Vehicle Rental - My KL");
 	    System.out.printf("%30s %35s\n\n", "", "=========================================");
 	    System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
 	    System.out.printf("%30s | %13s %-12s %10s |\n", "", "", "1.Renter", "");
@@ -170,34 +158,90 @@ public class VehicleRental {
     }
 
     public static void printConstantList(List<String> list) {
-	System.out.printf("%30s ", "");
+	System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
 	for (int i = 0, x = 1; i < list.size(); i++, x++) {
-	    System.out.printf("%d) %-20s", x, list.get(i));
+	    System.out.printf("%-11s| %02d) %-18s", "", x, list.get(i));
 	    if (x == list.size()) {
-		System.out.printf("\n");
+		System.out.printf("%-11s|", "");
+
 	    } else if (x % 3 == 0) {
-		System.out.printf("\n");
-		System.out.printf("%30s ", "");
+		System.out.printf("%-11s|\n", "");
+		System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+
 	    } else {
-		System.out.printf("\t\t");
+		System.out.printf("");
 	    }
+	}
+
+	if (list.size() % 3 == 0) {
+	    System.out.printf("\n%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+	}else if (list.size() % 3 > 0 && list.size() > 3) {
+	    System.out.printf("%-34s|", "");
+	    System.out.printf("%-34s|\n", "");
+	    System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+
+	} else if (list.size() % 2 > 0) {
+	    System.out.printf("%-34s|", "");
+	    System.out.printf("%-34s|", "");
+	    System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+
 	}
     }
 
     public static void printConstantList(String[] list) {
-	System.out.printf("%30s ", "");
+	System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
 
 	for (int i = 0, x = 1; i < list.length; i++, x++) {
-	    System.out.printf("%d) %-20s", x, list[i]);
+	    System.out.printf("%-11s| %02d) %-18s", "", x, list[i]);
 	    if (x == list.length) {
-		System.out.printf("\n");
+		System.out.printf("%-11s|", "");
 	    } else if (x % 3 == 0) {
-		System.out.printf("\n");
-		System.out.printf("%30s ", "");
+		System.out.printf("%-11s|\n", "");
+		System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
 	    } else {
-		System.out.printf("\t\t");
+		System.out.printf("");
+	    }
+
+	}
+	if (list.length % 3 > 0 && list.length > 3) {
+	    System.out.printf("%-34s|\n", "");
+	    System.out.printf("%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+	} else {
+	    System.out.printf("\n%-10s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
+	}
+    }
+
+    public static void printType(String[] list) {
+	System.out.printf("%-10s %35s\n", "", "+------------------------------------------------------------------------------------------+");
+
+	for (int i = 0, x = 1; i < list.length; i++, x++) {
+	    System.out.printf("%-11s| %02d) %-10s", "", x, list[i]);
+	    if (x == list.length) {
+		System.out.printf("%-11s|", "");
+	    } else if (x % 3 == 0) {
+		System.out.printf("%-11s|\n", "");
+		System.out.printf("%-10s %35s\n", "", "+------------------------------------------------------------------------------------------+");
+	    } else {
+		System.out.printf("");
 	    }
 	}
+
+	System.out.printf("\n%-10s %35s\n", "", "+------------------------------------------------------------------------------------------+");
+
+    }
+
+    public static void successfullyMsg(String str) {
+	Scanner scanner = new Scanner(System.in);
+	System.out.printf("\n%30s %10s\n", "", "Your have successfully " + str + " !");
+	System.out.printf("%30s %10s", "", "Press any key to continue : ");
+	scanner.nextLine();
+    }
+
+    public static void unsuccessfullyMsg(String str) {
+	Scanner scanner = new Scanner(System.in);
+	System.out.printf("\n%30s %10s\n", "", "Your have unsuccessfully " + str + " !");
+	System.out.printf("%30s %10s", "", "Press any key to continue : ");
+	scanner.nextLine();
     }
 
 }

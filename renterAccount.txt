@@ -1,0 +1,6 @@
+UID00001|Vickham Foo|Selangor,Balakong|020416101237|vickham@gmail.com|0123456789|R00001|vickham02|vickhaM123.|2|avengers
+UID00002|Wong Kah Ming|Kuala Lumpur,Batu Caves|020719101233|kahming02@gmail.com|0164567365|R00002|kahming02|kahminG123.|3|husky
+UID00003|Melvin Wong|Johor,Johor Bahru|020523101677|melvin02@gmail.com|012-6758943|R00003|melvin02|melviN123.|2|Cars
+UID00004|Andrew Cheok|Perak,Ipoh|020912105511|andrew02@gmail.com|0162346767|R00004|andrew02|andreW123.|1|Low
+UID00005|Calvin Lin|Selangor,Bangi|021123108877|calvinlin@gmail.com|01131245667|R00005|calvinlin02|calvinliN123.|2|Liverpool
+UID00006|David Beckham|Selangor,Balakong|760134167777|davidB@gmail.com|0123458877|R00006|david76|daviD123.|2|Star Wars

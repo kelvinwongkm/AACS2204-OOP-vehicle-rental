@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.time.LocalDate;
@@ -17,16 +12,18 @@ import static vehiclerental.GeneralValidation.validateIntegerInput;
 import static vehiclerental.GeneralValidation.validateMultiInteger;
 import static vehiclerental.GeneralValidation.validateOptionRange;
 import static vehiclerental.VehicleRental.printConstantList;
+import static vehiclerental.VehicleRental.successfullyMsg;
+import static vehiclerental.VehicleRental.unsuccessfullyMsg;
 
 /**
  *
- * @author kelvin
+ * @author Wong Kah Ming
  */
 public class RentingInfo implements AvailableLocation {
 
     private String location;
     private double rentRate;
-    private static List<String> featureList;
+    private List<String> featureList;
     private List<String> availableFeature;
     private List<String> availableStartDate;
     private List<String> availableEndDate;
@@ -54,7 +51,7 @@ public class RentingInfo implements AvailableLocation {
     }
 
     public void setFeatureList(List<String> featureList) {
-        RentingInfo.featureList = featureList;
+        this.featureList = featureList;
     }
 
     public List<String> getAvailableStartDate() {
@@ -78,13 +75,14 @@ public class RentingInfo implements AvailableLocation {
     }
 
     public void addRentInfo() {
-        System.out.printf("%30s Renting Info\n", "");
+        System.out.printf("%-41s Renting Info\n", "");
+        System.out.printf("%30s %35s\n", "", "=========================================");
 
         //get location
         location = getLocationString();
-System.out.println("");
+        System.out.println("");
         // get rent rate
-        double rate = validateDoubleInput("Please enter the Rent Rate of your vehicle : ");
+        double rate = validateDoubleInput(String.format("Please enter the Rent Rate of your vehicle : ",""));
         setRentRate(rate);
 
         System.out.println("");
@@ -121,7 +119,7 @@ System.out.println("");
                 date, 0).toString());
         
         System.out.println("");
-        availableEndDate.add(setRequiredDate("Ending date that your vehicle is available for reserved/rent (dd/mm/yyyy) : ",
+        availableEndDate.add(setRequiredDate("Ending date that your vehicle is available for reserved/rent (dd/mm/yyyy)   : ",
                 LocalDate.parse(availableStartDate.get(0)), 7).toString());
 
     }
@@ -134,11 +132,11 @@ System.out.println("");
 
     public void setFeature(RentingInfo data) {
         Scanner scanner = new Scanner(System.in);
-        System.out.printf("%30s Select your vehicle's feature\n", "");
+        System.out.printf("%30s Select your vehicle's feature\n\n", "");
         printConstantList(featureList.toArray(new String[0]));
 
-        System.out.printf("%30s You may select more than 1 feature. Please separate your selection with comma. IE: 1,2", "");
-        System.out.printf("%30s Your selection : ", "");
+        System.out.printf("\n%-15s You may select more than 1 feature. Please separate your selection with comma. IE: 1,2", "");
+        System.out.printf("\n%30s Your selection |> ", "");
         String userSelection = scanner.nextLine().replaceAll("\\s", "");
         String[] selection = userSelection.trim().split(",");
 
@@ -160,7 +158,7 @@ System.out.println("");
 
         System.out.printf("%30s Select your vehicle's feature\n", "");
         printConstantList(featureList.toArray(new String[0]));
-        System.out.printf("%30s You may select more than 1 feature. Please separate your selection with comma. IE: 1,2\n", "");
+        System.out.printf("%15s You may select more than 1 feature. Please separate your selection with comma. IE: 1,2\n", "");
         List<String> selection = validateMultiInteger(featureList);
 
         for (String option : selection) {
@@ -173,16 +171,16 @@ System.out.println("");
     public boolean updateRentInfo(RentingInfo data) {
         int number;
         boolean updateConfirm = false;
-
+        Staff staff = new Staff();
         do {
 
             updateConfirm = false;
 
-            System.out.printf("\n%30s --------------------------Update Renting Details------------------------------\n", "");
-            System.out.printf("%30s | %-23s | %-23s | %-23s |\n", "1. Location", "2. Rent Rate", "3. Available Feature");
-            System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
-            System.out.printf("%30s | %-23s | %-23s | %-23s |\n", "4. Available Date", "0. Return", "");
-            System.out.printf("%30s -------------------------------------------------------------------------------\n", "");
+            System.out.printf("\n\n%15s --------------------------Update Renting Details------------------------------\n", "");
+            System.out.printf("%15s | %-23s | %-23s | %-23s |\n","", "1. Location", "2. Rent Rate", "3. Available Feature");
+            System.out.printf("%15s -------------------------------------------------------------------------------\n", "");
+            System.out.printf("%15s | %-23s | %-23s | %-23s |\n","", "4. Available Date", "0. Return", "");
+            System.out.printf("%15s -------------------------------------------------------------------------------\n\n", "");
 
             do {
                 number = validateIntegerInput("Please enter your selection : ");
@@ -200,6 +198,10 @@ System.out.println("");
                     updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                     if (updateConfirm) {
                         data.setLocation(enteredLocation);
+                        successfullyMsg("updated location");
+                        staff.updateActivityPerformed(3);
+                    }else{
+                        unsuccessfullyMsg("updated location");
                     }
                     break;
 
@@ -211,6 +213,10 @@ System.out.println("");
                     updateConfirm = validateConfirm("Do you confirm your changes? (Y/N) : ");
                     if (updateConfirm) {
                         data.setRentRate(enteredRentRate);
+                        successfullyMsg("updated rent rate");
+                        staff.updateActivityPerformed(3);
+                    }else{
+                        unsuccessfullyMsg("updated rent rate");
                     }
                     break;
 
@@ -230,6 +236,10 @@ System.out.println("");
                         // revert to orignal data if user does not want to change the feature
                         data.availableFeature.clear();
                         data.availableFeature.addAll(tempFeature);
+                       unsuccessfullyMsg("updated available feature");
+                    }else{
+                         successfullyMsg("updated available feature");
+                         staff.updateActivityPerformed(3);
                     }
 
                     break;
@@ -265,7 +275,12 @@ System.out.println("");
 
                         data.availableStartDate.addAll(tempStartDate);
                         data.availableEndDate.addAll(tempEndDate);
+                        unsuccessfullyMsg("updated available date");
+                    }else{
+                    successfullyMsg("updated available date");
+                    staff.updateActivityPerformed(3);
                     }
+                    
                     break;
 
             }
@@ -277,10 +292,9 @@ System.out.println("");
     public static String getLocationString() {
         int selectedOption;
         do {
-            System.out.printf("\n%30s Available City: \n", "");
+            System.out.printf("\n%30s Available City: \n\n", "");
             printConstantList(CITY);
-
-            selectedOption = validateIntegerInput("Please select required city : ");
+        selectedOption = validateIntegerInput(String.format("\n%30s Please select required city : ",""));
         } while (!validateOptionRange(1, CITY.length, selectedOption));
 
         return CITY[selectedOption - 1];

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.util.ArrayList;
@@ -14,7 +9,7 @@ import java.util.Set;
 
 /**
  *
- * @author kelvin
+ * @author Wong Kah Ming
  */
 public class GeneralValidation {
 
@@ -29,12 +24,11 @@ public class GeneralValidation {
     }
 
     public static boolean validateConfirm(String message) {
-        Scanner scanner = new Scanner(System.in);
         char character;
 
         do {
-            System.out.printf("\n%30s %s", "",message);
-            character = scanner.nextLine().toUpperCase().charAt(0);
+	    String temp = validateStringInput(message);
+            character = temp.toUpperCase().charAt(0);
 
             switch (character) {
                 case 'Y':
@@ -42,7 +36,7 @@ public class GeneralValidation {
                 case 'N':
                     break;
                 default:
-                    System.out.printf("%30s Invalid input, please enter again\n\n","");
+                    System.out.printf("\n%30s Invalid input, please enter again\n\n","");
             }
         } while (Character.compare(character, 'Y') != 0 && Character.compare(character, 'N') != 0);
 
@@ -78,7 +72,7 @@ public class GeneralValidation {
         do {
             validInput = true;
 
-            System.out.print(String.format("%30s %s", "", requestMessage));
+            System.out.print(String.format("%-30s %s", "", requestMessage));
             input = scanner.nextLine();
 
             if (input.length() == 0) {
@@ -88,7 +82,7 @@ public class GeneralValidation {
 
                 for (int i = 0; i < input.length(); i++) {
                     if (!Character.isDigit(input.charAt(i))) {
-                        System.out.printf("%30s Invalid input entered. Please ensure you only enter integer value\n\n","");
+                        System.out.printf("\n%30s Invalid input entered. Please ensure you only enter integer value\n\n","");
                         validInput = false;
                         break;
                     }
@@ -139,7 +133,7 @@ public class GeneralValidation {
         do {
             do {
                 validInput = true;
-                System.out.printf(String.format("%30s Your selection : ", ""));
+                System.out.printf(String.format("\n%30s Your selection |> ", ""));
                 String userSelection = scanner.nextLine().trim().replaceAll("\\s", "");
                 selection = userSelection.trim().split(",");
 
@@ -160,7 +154,6 @@ public class GeneralValidation {
             for (String option : selection) {
                 int userOption = Integer.parseInt(option);
                 if (!validateOptionRange(1, stringList.size(), userOption)) {
-//                    System.out.printf("%30s Value entered is out of available range, please enter again\n\n", "");
                     validInput = false;
                     break;
                 }
@@ -177,7 +170,7 @@ public class GeneralValidation {
     }
 
     public static boolean noInput() {
-        System.out.printf("%30s Non integer value is entered, please enter again\n\n", "");
+        System.out.printf("\n%30s Invalid is entered, please enter again\n\n", "");
         return false;
     }
 

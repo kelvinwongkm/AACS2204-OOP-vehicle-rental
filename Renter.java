@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 import java.io.BufferedWriter;
@@ -18,16 +13,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import vehiclerental.Reservation;
-import vehiclerental.User;
 import static vehiclerental.GeneralValidation.validateIntegerInput;
 import static vehiclerental.GeneralValidation.validateOptionRange;
-import vehiclerental.VehicleRental;
+import static vehiclerental.GeneralValidation.validateStringInput;
 import static vehiclerental.VehicleRental.timeCountDown;
 
 /**
  *
- * @author GhostGod
+ * @author Vickham Foo
  */
 public class Renter extends User implements AvailableLocation {
 
@@ -37,15 +30,11 @@ public class Renter extends User implements AvailableLocation {
     private int choiceSecurityQues;
     private String securityAnswer;
     private static int numberOfUsers = 0;
-
-    public Renter() {
+    
+ public Renter() {
         this("", "", "", 0, "", "", "", "", "", "", "");
     }
-    
-    public Renter(String renterID) {
-        this(renterID, "", "", 0, "", "", "", "", "", "", "");
-    }
-
+ 
     public Renter(String renterID, String username, String password, int choiceSecurityQues, String securityAnswer, String userID, String name, String address, String icNum, String email, String phoneNumber) {
         super(userID, name, address, icNum, email, phoneNumber);
         this.renterID = renterID;
@@ -57,42 +46,6 @@ public class Renter extends User implements AvailableLocation {
 
     public String getRenterID() {
         return renterID;
-    }
-
-    public void setRenterID(String renterID) {
-        this.renterID = renterID;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getChoiceSecurityQues() {
-        return choiceSecurityQues;
-    }
-
-    public void setChoiceSecurityQues(int choiceSecurityQues) {
-        this.choiceSecurityQues = choiceSecurityQues;
-    }
-
-    public String getSecurityAnswer() {
-        return securityAnswer;
-    }
-
-    public void setSecurityAnswer(String securityAnswer) {
-        this.securityAnswer = securityAnswer;
     }
 
     @Override
@@ -158,10 +111,11 @@ public class Renter extends User implements AvailableLocation {
                 do {
                     System.out.printf("%30s %10s\n", "", "1. Try Again.");
                     System.out.printf("%30s %10s\n", "", "2. Forgot Password.");
-                    System.out.printf("%30s %-2s", "", "|>");
-                    String input = scanner.nextLine();
-                    optionFP = validationOptionNum(input, 2);
-                } while (optionFP < 1 || optionFP > 2);
+                    System.out.printf("%30s %-10s\n", "", "0. Back.");
+                    System.out.println("");
+                    int  input = validateIntegerInput(String.format("|>"));
+                    optionFP=input;
+                } while (!validateOptionRange(0, 2, optionFP));
                 if (optionFP == 1) {
                     System.out.printf("\n%30s %10s\n\n", "", attempt + " attempt left.");
 
@@ -178,6 +132,8 @@ public class Renter extends User implements AvailableLocation {
                 }
                 if (optionFP == 2) {
                     forgetPassword();
+                } else if(optionFP==0){
+                break;
                 }
 
             } else {
@@ -194,9 +150,9 @@ public class Renter extends User implements AvailableLocation {
         do {
             System.out.printf("%30s %10s\n", "", "1.Try Again.");
             System.out.printf("%30s %10s\n", "", "2.Register.");
-            System.out.printf("%30s %5s\n", "", "0.Back.");
-
-            option = validateIntegerInput(String.format("%30s %-2s", "", "|>"));
+            System.out.printf("%30s %-5s\n", "", "0.Back.");
+            System.out.println("\n");
+            option = validateIntegerInput(String.format("|>"));
         } while (!validateOptionRange(0, 2, option));
 
         switch (optionIDN) {
@@ -232,12 +188,13 @@ public class Renter extends User implements AvailableLocation {
             System.out.printf("%30s %5s\n", "", "0. Back");
 
             do {
-                option = validateIntegerInput(String.format("\n%30s %10s", "", "Your choice : "));
-            } while (!validateOptionRange(0, 2, option));
+                System.out.println("");
+                option = validateIntegerInput(String.format("Your choice : "));
+                choiceSQ=option;
+            } while (!validateOptionRange(0, 3, option));
 
             if (choiceSQ == choiceSecurityQues) {
-                do {
-                    scanner.nextLine();
+                do{
                     System.out.printf("%30s %10s", "", "Your answer : ");
                     String securityAns = scanner.nextLine();
                     if (securityAns.equals(securityAnswer)) {
@@ -255,13 +212,13 @@ public class Renter extends User implements AvailableLocation {
                         }
 
                     } else {
-                        System.out.printf("%30s %10s\n\n", "", "Answer Incorrect! ");
+                        System.out.printf("\n%30s %10s\n", "", "Answer Incorrect! ");
                         do {
                             System.out.printf("%30s %10s\n", "", "1.Try Again.");
                             System.out.printf("%30s %5s\n", "", "0.Back.");
-                            System.out.printf("%30s %-2s", "", "|>");
+                            System.out.println("");
 
-                            optionWA = validateIntegerInput(String.format("%30s %-2s", "", "|>"));
+                            optionWA = validateIntegerInput(String.format("|>"));
                         } while (!validateOptionRange(0, 1, optionWA));
 
                         if (optionWA == 1) {
@@ -277,17 +234,16 @@ public class Renter extends User implements AvailableLocation {
                         }
                     }
                 } while (counterFP == 0);
-            } else if (choiceSQ == 4) {
+            } else if (choiceSQ == 0) {
                 break;
             } else {
                 System.out.printf("\n%30s %10s\n", "", "This is not your security question.");
                 do {
                     System.out.printf("%30s %10s\n", "", "1. Try Again.");
                     System.out.printf("%30s %5s\n", "", "0. Back.");
-                    System.out.printf("%30s %-2s", "", "|>");
-
-                    optionTry = validateIntegerInput(String.format("%30s %-2s", "", "|>"));
-                } while (!validateOptionRange(0, 1, option));
+                    System.out.println("");
+                    optionTry = validateIntegerInput(String.format("|>"));
+                } while (!validateOptionRange(0, 1, optionTry));
 
                 if (optionTry == 1) {
                     counterFP = 0;
@@ -327,7 +283,6 @@ public class Renter extends User implements AvailableLocation {
             state = validationOptionNum(tempState, 9);
         } while (validationState(state) == false);
 
-        scanner.nextLine();
         do {
             System.out.printf("\n%27s %10s", "", "City : ");
             city = scanner.nextLine();
@@ -353,11 +308,10 @@ public class Renter extends User implements AvailableLocation {
         } while (validationPhoneNum(regPhoneNumber) == false);
         setPhoneNumber(regPhoneNumber);
 
-        scanner.nextLine();
 
         do {
-            System.out.printf("\n%30s %10s", "", "Username : ");
-            regUsername = scanner.nextLine();
+           System.out.println("");
+           regUsername = validateStringInput(String.format("Username : "));
         } while (validationUserIDExist(regUsername) == false);
         username = regUsername;
 
@@ -375,7 +329,6 @@ public class Renter extends User implements AvailableLocation {
         } while (choiceSecurityQues == 0);
         System.out.printf("\n%30s %10s", "", "Please do no forget the answer.");
         System.out.printf("\n%30s %10s\n", "", "It would be use to reset your password in the future.");
-        scanner.nextLine();
         do {
             System.out.printf("\n%30s %10s", "", "Your answer : ");
             securityAnswer = scanner.nextLine();
@@ -404,7 +357,7 @@ public class Renter extends User implements AvailableLocation {
 
     }
 
-    public static void printState(String[] list) {
+    public void printState(String[] list) {
         System.out.printf("%6s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
         System.out.printf("%6s | %-46s %-6s %-48s |\n", "", "", "STATE", "");
         System.out.printf("%6s %35s\n", "", "+--------------------------------------------------------------------------------------------------------+");
@@ -425,7 +378,7 @@ public class Renter extends User implements AvailableLocation {
         Reservation r = new Reservation(this);
         int option;
         do {
-            System.out.printf("\n%43s %15s\n", " ", "Vehicle Rental");
+            System.out.printf("\n%40s %15s\n", " ", "Main Menu");
             System.out.printf("%30s %35s\n\n", "", "=========================================");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
             System.out.printf("%30s | %10s %-12s %-10s |\n", "", "", "1. Rent Vehicle", "");
@@ -555,37 +508,37 @@ public class Renter extends User implements AvailableLocation {
 
     }
 
-//    public static Renter getRenterData(String renterID) {
-//        Renter temp = new Renter();
-//        try {
-//            try (FileReader fr = new FileReader("renterAccount.txt")) {
-//                Scanner reader = new Scanner(fr);
-//                String line;
-//                String[] lineArr;
-//                while ((line = reader.nextLine()) != null) {
-//                    lineArr = line.split(Pattern.quote("|"));
-//                    if (lineArr[6].equals(renterID)) {
-//                        temp.setUserID(lineArr[0]);
-//                        temp.setName(lineArr[1]);
-//                        temp.setAddress(lineArr[2]);
-//                        temp.setIcNum(lineArr[3]);
-//                        temp.setEmail(lineArr[4]);
-//                        temp.setPhoneNumber(lineArr[5]);
-//                        temp.setRenterID(lineArr[6]);
-//                        temp.getUsername(lineArr[7]);
-//                        password = lineArr[8];
-//                        choiceSecurityQues = Integer.parseInt(lineArr[9]);
-//                        securityAnswer = lineArr[10];
-//                        return;
-//                    }
-//                }
-//                fr.close();
-//            } catch (Exception e) {
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//    }
+    public static Renter getRenterData(String renterID) {
+        Renter temp = new Renter();
+        try {
+            try (FileReader fr = new FileReader("renterAccount.txt")) {
+                Scanner reader = new Scanner(fr);
+                String line;
+                String[] lineArr;
+                while ((line = reader.nextLine()) != null) {
+                    lineArr = line.split(Pattern.quote("|"));
+                    if (lineArr[6].equals(renterID)) {
+                        temp.setUserID(lineArr[0]);
+                        temp.setName(lineArr[1]);
+                        temp.setAddress(lineArr[2]);
+                        temp.setIcNum(lineArr[3]);
+                        temp.setEmail(lineArr[4]);
+                        temp.setPhoneNumber(lineArr[5]);
+                        temp.renterID = lineArr[6];
+                        temp.username = lineArr[7];
+                        temp.password = lineArr[8];
+                        temp.choiceSecurityQues = Integer.parseInt(lineArr[9]);
+                        temp.securityAnswer = lineArr[10];
+                        break;
+                    }
+                }
+                fr.close();
+            } catch (Exception e) {
+            }
+        } catch (Exception e) {
+        }
+        return temp;
+    }
 
     public static int validationOptionNum(String input, int index) {
         int option = 0;
@@ -673,7 +626,7 @@ public class Renter extends User implements AvailableLocation {
                 String line;
                 String[] lineArr;
                 while ((line = reader.nextLine()) != null) {
-                    lineArr = line.split(",");
+                    lineArr = line.split(Pattern.quote("|"));
                     if (lineArr[0].equals(userIDReg)) {
                         System.out.printf("\n%30s %10s\n", "", "This Username is already existed.");
                         return false;
@@ -734,7 +687,6 @@ public class Renter extends User implements AvailableLocation {
     }
 
     public void modifyAccountMenu() {
-        Scanner scanner = new Scanner(System.in);
         int option = 0;
 
         do {
@@ -939,7 +891,7 @@ public class Renter extends User implements AvailableLocation {
                 String[] lineArr;
                 while ((line = reader.nextLine()) != null) {
                     lineArr = line.split(Pattern.quote("|"));
-                    if (lineArr[7].equals(username)) {
+                    if (lineArr[6].equals(renterID)) {
                         tempArray.add(this.toString());
                     } else {
                         tempArray.add(line);

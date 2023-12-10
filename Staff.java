@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vehiclerental;
 
 
@@ -19,7 +14,7 @@ import static vehiclerental.GeneralValidation.validateOptionRange;
 
 /**
  *
- * @author GhostGod
+ * @author Vickham Foo
  */
 public class Staff extends User {
 
@@ -92,18 +87,18 @@ public class Staff extends User {
 
     @Override
     public void mainMenu() {//staff main menu
-
+    Report report = new Report();
         Scanner scanner = new Scanner(System.in);
         int option = 0;
         do {
             System.out.printf("\n%-37s %15s\n", " ", "Staff");
             System.out.printf("%30s %35s\n\n", "", "=========================================");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %-10s %-12s %-9s |\n", "", "", "1. Manage Vehicle", "");
+            System.out.printf("%30s | %-10s %-12s %-8s |\n", "", "", "1. Manage Vehicle", "");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %-10s %-12s %-13s |\n", "", "", "2. My Profile", "");
+            System.out.printf("%30s | %-10s %-12s %-12s |\n", "", "", "2. My Profile", "");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %-10s %-12s %-13s |\n", "", "", "3. View Report", "");
+            System.out.printf("%30s | %-10s %-12s %-11s |\n", "", "", "3. View Report", "");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
             System.out.printf("%30s | %-10s %-12s %-13s |\n", "", "", "0. Log Out", "");
             System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
@@ -123,11 +118,21 @@ public class Staff extends User {
 
                     break;
                 case 2:
-                    myAccount();// view profile
+                    fileReaderStaff(staffID);
+                    myAccount();// view profile 
                     break;
 
                 case 3:
                     //view report
+                    {
+                    try {
+                         report.assignVehiclesReserved();
+                         report.displayReport();//view report
+                         report.displayChart();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Staff.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                     break;
 
                 case 0:
@@ -155,12 +160,12 @@ public class Staff extends User {
                 System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
                 System.out.printf("%30s | %10s %-12s %-13s |\n", "", "", "2. Motorbike", "");
                 System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-                System.out.printf("%30s | %10s %-12s %1s |\n", "", "", "3. Recreational Vehicle", "");
+                System.out.printf("%30s | %10s %-12s %2s |\n", "", "", "3. Recreational Vehicle", "");
                 System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-                System.out.printf("%30s | %13s %-12s %10s |\n", "", "", "0. Return", "");
+                System.out.printf("%30s | %10s %-12s %-13s |\n", "", "", "0. Return", "");
                 System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
 
-                option = validateIntegerInput("Please select the vehicle type you want to manage : ");
+                option = validateIntegerInput(String.format("\n%30s %10s", "", "Your Selection |> "));
             } while (!validateOptionRange(0, 3, option));
 
             switch (option) {
@@ -186,17 +191,33 @@ public class Staff extends User {
 
     public void vehicleMenuDetails(String vehicleType, Object o) throws IOException {
         int option = 0;
+  
         do {
+            
+            if(vehicleType.equals("Recreational Vehicle")){
+        
             System.out.printf("\n%37s %15s\n", " ", "Staff");
             System.out.printf("%30s %35s\n\n", "", "=========================================");
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %13s %-12s %-10s |\n", "", "", "1. Add " + vehicleType, "");
+            System.out.printf("%30s |%-7s %-25s    |\n", "", "","1. Add " + vehicleType);
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %13s %-12s %-10s |\n", "", "", "2. View " + vehicleType, "");
+            System.out.printf("%30s |%-7s %-25s   |\n", "","", "2. View " + vehicleType);
             System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
-            System.out.printf("%30s | %13s %-12s %11s |\n", "", "", "0. Return", "");
+            System.out.printf("%30s |%-7s %-25s      |\n", "","", "0. Return");
             System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
-
+        
+             }else{
+                  
+            System.out.printf("\n%37s %15s\n", " ", "Staff");
+            System.out.printf("%30s %35s\n\n", "", "=========================================");
+            System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
+            System.out.printf("%30s |%-12s %-25s |\n", "","", "1. Add " + vehicleType);
+            System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
+            System.out.printf("%30s |%-12s %-25s |\n", "","", "2. View " + vehicleType);
+            System.out.printf("%30s %35s\n", "", "+---------------------------------------+");
+            System.out.printf("%30s |%-12s %-25s |\n", "","", "0. Return");
+            System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
+                  }
             do {
                 option = validateIntegerInput(String.format("\n%30s %10s", "", "Your Selection |> "));
             } while (!validateOptionRange(0, 3, option));
@@ -218,8 +239,9 @@ public class Staff extends User {
                     break;
 
                 case 2:
+                    System.out.println("\n");
                     ((Vehicle) o).viewVehicle(o);
-                    updateDeleteVehicle();
+
                     break;
 
             }
@@ -241,7 +263,7 @@ public class Staff extends User {
         System.out.printf("%30s %35s\n\n", "", "+---------------------------------------+");
 
         do {
-            option = validateIntegerInput("Please select the action you want to perform : ");
+            option = validateIntegerInput(String.format("\n%30s %10s", "", "Your Selection |> "));
         } while (!validateOptionRange(0, 3, option));
         return option;
     }
@@ -292,45 +314,47 @@ public class Staff extends User {
     }
 
     public void updateActivityPerformed(int actPerformed) {
+
         String tempActPerformed = "";
         switch (actPerformed) {
             case 1:
                 tempActPerformed = "Add Vehicle";
+                 modifyFileActPerformed(tempActPerformed);
                 break;
             case 2:
                 tempActPerformed = "Delete Vehicle";
+                 modifyFileActPerformed(tempActPerformed);
                 break;
             case 3:
                 tempActPerformed = "Modify Vehicle";
-                break;
-            default:
+                 modifyFileActPerformed(tempActPerformed);
                 break;
         }
-        modifyFileActPerformed(tempActPerformed);
-        fileReaderStaff(staffID);
+        
+       
     }
 
     public void modifyFileActPerformed(String newActPerformed) {
         ArrayList<String> tempArray = new ArrayList<>();
+        
         try {
             try (FileReader fr = new FileReader("staffAccount.txt")) {
                 Scanner reader = new Scanner(fr);
                 String line;
                 String[] lineArr;
                 while ((line = reader.nextLine()) != null) {
-                    lineArr = line.split(",");
-                    if (lineArr[1].equals(staffID)) {
+                    lineArr = line.split(Pattern.quote("|"));
+                    if (lineArr[1].equals("S001")) {
                         tempArray.add(
-                                lineArr[0] + ","
-                                + lineArr[1] + ","
-                                + lineArr[2] + ","
-                                + lineArr[3] + ","
-                                + lineArr[4] + ","
-                                + lineArr[5] + ","
-                                + lineArr[6] + ","
-                                + lineArr[7] + ","
-                                + lineArr[8] + ","
-                                + lineArr[9] + ","
+                                lineArr[0] + "|"
+                                + lineArr[1] + "|"
+                                + lineArr[2] + "|"
+                                + lineArr[3] + "|"
+                                + lineArr[4] + "|"
+                                + lineArr[5] + "|"
+                                + lineArr[6] + "|"
+                                + lineArr[7] + "|"
+                                + lineArr[8] + "|"
                                 + newActPerformed);
                     } else {
                         tempArray.add(line);

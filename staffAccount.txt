@@ -1,0 +1,3 @@
+UID1000|S001|vickham0416|Vickham Foo|Selangor,Bangi|020416107777|vickhamfoo@gmail.com|0123456123|Junior Admin|Add Vehicle
+UID1001|S002|kahming0719|Wong Kah Ming|Selangor,Balakong|020719101111|wongkahming@gmail.com|0163451234|Senior Admin|Add Vehicle
+UID1002|S003|melvin0523|Melvin Wong|Perak,Ipoh|020523103333|melvinwong@gmail.com|01134656123|Manager|Delete Vehicle
